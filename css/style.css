@@ -1,0 +1,964 @@
+/********** Sawaed CSS **********/
+
+/* RTL Support */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] .navbar-nav {
+    text-align: right;
+}
+
+[dir="rtl"] .navbar-nav .nav-link {
+    text-align: right;
+}
+
+[dir="rtl"] .carousel-caption {
+    text-align: center;
+}
+
+[dir="rtl"] .title-left {
+    text-align: right;
+}
+
+[dir="rtl"] .title-center {
+    text-align: center;
+}
+
+[dir="rtl"] .service-text {
+    text-align: right;
+}
+
+[dir="rtl"] .service-text.text-md-end {
+    text-align: right;
+}
+
+[dir="rtl"] .list-group-item {
+    text-align: right;
+}
+
+[dir="rtl"] .testimonial-item {
+    text-align: center;
+}
+
+[dir="rtl"] .team-name {
+    text-align: center;
+}
+
+[dir="rtl"] .portfolio-name {
+    text-align: center;
+}
+
+[dir="rtl"] .btn {
+    text-align: center;
+}
+
+/* Fix for RTL navigation alignment */
+[dir="rtl"] .navbar-nav .nav-item {
+    text-align: right;
+}
+
+[dir="rtl"] .dropdown-menu {
+    text-align: right;
+}
+
+[dir="rtl"] .dropdown-item {
+    text-align: right;
+}
+
+/* RTL form elements */
+[dir="rtl"] .form-control {
+    text-align: right;
+}
+
+[dir="rtl"] input[type="text"] {
+    text-align: right;
+}
+
+/* RTL button alignment */
+[dir="rtl"] .d-flex.gap-3 {
+    flex-direction: row-reverse;
+}
+
+/* RTL social media buttons */
+[dir="rtl"] .d-none.d-lg-flex {
+    flex-direction: row-reverse;
+}
+
+/* RTL footer alignment */
+[dir="rtl"] .footer {
+    text-align: center;
+}
+
+/* RTL carousel controls */
+[dir="rtl"] .carousel-control-prev {
+    right: 0;
+    left: auto;
+}
+
+[dir="rtl"] .carousel-control-next {
+    left: 0;
+    right: auto;
+}
+
+/* RTL service items */
+[dir="rtl"] .service-item-left .row {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .service-item-right .row {
+    flex-direction: row;
+}
+
+/* RTL portfolio items */
+[dir="rtl"] .portfolio-item {
+    text-align: center;
+}
+
+/* RTL team items */
+[dir="rtl"] .team-item {
+    text-align: center;
+}
+
+/* RTL testimonial items */
+[dir="rtl"] .testimonial-item {
+    text-align: center;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+/* RTL back to top button */
+[dir="rtl"] .back-to-top {
+    left: 45px;
+    right: auto;
+}
+
+/* RTL text flow improvements */
+[dir="rtl"] p, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+    text-align: right;
+}
+
+[dir="rtl"] .carousel-caption p {
+    text-align: center;
+}
+
+[dir="rtl"] .carousel-caption h1, [dir="rtl"] .carousel-caption h5 {
+    text-align: center;
+}
+
+/* RTL margin and padding adjustments */
+[dir="rtl"] .me-1 {
+    margin-left: 0.25rem !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .me-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .ms-1 {
+    margin-right: 0.25rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .ms-2 {
+    margin-right: 0.5rem !important;
+    margin-left: 0 !important;
+}
+
+/* RTL navbar brand alignment */
+[dir="rtl"] .navbar-brand {
+    text-align: right;
+}
+
+/* RTL footer social buttons */
+[dir="rtl"] .d-flex.justify-content-center {
+    flex-direction: row-reverse;
+}
+
+/* RTL service item animations */
+[dir="rtl"] .service-item-left .wow.fadeInRight {
+    animation-name: fadeInLeft;
+}
+
+[dir="rtl"] .service-item-left .wow.fadeInLeft {
+    animation-name: fadeInRight;
+}
+
+/* RTL button text alignment */
+[dir="rtl"] .btn {
+    text-align: center;
+    direction: rtl;
+}
+
+/* RTL list items */
+[dir="rtl"] .list-group-item {
+    text-align: right;
+    direction: rtl;
+}
+
+/* RTL dropdown positioning */
+[dir="rtl"] .dropdown-menu {
+    right: 0;
+    left: auto;
+    text-align: right;
+}
+
+/* RTL carousel indicators */
+[dir="rtl"] .carousel-indicators {
+    right: 0;
+    left: auto;
+}
+
+/* RTL portfolio overlay text */
+[dir="rtl"] .portfolio-name h5 {
+    text-align: center;
+}
+
+/* RTL team item text */
+[dir="rtl"] .team-name h5 {
+    text-align: center;
+}
+
+/* RTL testimonial text */
+[dir="rtl"] .testimonial-item p {
+    text-align: center;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+[dir="rtl"] .testimonial-item h5 {
+    text-align: center;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+[dir="rtl"] .testimonial-item span {
+    text-align: center;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+.back-to-top {
+    position: fixed;
+    display: none;
+    right: 45px;
+    bottom: 45px;
+    z-index: 99;
+}
+
+/* Floating WhatsApp Button */
+.floating-whatsapp {
+    position: fixed;
+    display: block;
+    right: 45px;
+    bottom: 100px;
+    z-index: 99;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #25D366;
+    border: none;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.floating-whatsapp:hover {
+    background-color: #128C7E;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+.floating-whatsapp i {
+    font-size: 24px;
+    color: white;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* RTL Floating WhatsApp Button */
+[dir="rtl"] .floating-whatsapp {
+    left: 45px;
+    right: auto;
+}
+
+
+/*** Spinner ***/
+#spinner {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s ease-out, visibility 0s linear .5s;
+    z-index: 99999;
+}
+
+#spinner.show {
+    transition: opacity .5s ease-out, visibility 0s linear 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/*** Button ***/
+.btn {
+    font-weight: 600;
+    transition: .5s;
+    border-radius: 50px;
+}
+
+.btn-square {
+    width: 38px;
+    height: 38px;
+}
+
+.btn-sm-square {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-lg-square {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: inherit;
+}
+
+.btn-primary {
+    color: var(--bs-white);
+}
+
+
+/*** Navbar ***/
+.navbar {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    transition: .5s;
+}
+
+.navbar .navbar-nav .nav-link {
+    margin-right: 25px;
+    padding: 40px 0;
+    color: var(--bs-white);
+    font-size: 17px;
+    text-transform: uppercase;
+    outline: none;
+    transition: .5s;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link.active {
+    color: #aed136;
+}
+
+@media (max-width: 991.98px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar.bg-dark .navbar-nav .nav-link {
+        margin-right: 0;
+        padding: 10px 0;
+    }
+
+    .navbar .navbar-nav {
+        margin-top: 8px;
+        border-top: 1px solid var(--bs-light);
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar.bg-dark .navbar-nav .nav-link {
+        padding: 20px 0;
+    }
+
+    .navbar .nav-item .dropdown-menu {
+        display: block;
+        border: none;
+        margin-top: 0;
+        top: 150%;
+        opacity: 0;
+        visibility: hidden;
+        transition: .5s;
+    }
+
+    .navbar .nav-item:hover .dropdown-menu {
+        top: 100%;
+        visibility: visible;
+        transition: .5s;
+        opacity: 1;
+    }
+}
+
+.navbar .dropdown-toggle::after {
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+
+/*** Header ***/
+.carousel-caption {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 100px;
+    background: rgba(0, 0, 0, .7);
+    z-index: 1;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 10%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+@media (max-width: 768px) {
+    #header-carousel .carousel-item {
+        position: relative;
+        min-height: 550px;
+    }
+    
+    #header-carousel .carousel-item img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.page-header {
+    padding-top: 200px;
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/carousel-1.jpg) top center no-repeat;
+    background-size: cover;
+}
+
+.page-header .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--bs-white);
+}
+
+
+/*** Title ***/
+.title {
+    margin-bottom: 2rem;
+}
+
+.title .title-left,
+.title .title-center,
+.title .title-right {
+    display: inline-block;
+    text-transform: uppercase;
+    overflow: hidden;
+}
+
+.title .title-center {
+    text-align: center;
+}
+
+.title .title-right {
+    text-align: right;
+}
+
+.title .title-left h5,
+.title .title-center h5,
+.title .title-right h5 {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.title .title-left h5::after,
+.title .title-center h5::before,
+.title .title-center h5::after,
+.title .title-right h5::before {
+    position: absolute;
+    content: "";
+    width: 500%;
+    height: 0;
+    top: 9px;
+    border-bottom: 1px solid var(--bs-white);
+}
+
+.title .title-left h5::after,
+.title .title-center h5::after {
+    left: calc(100% + 15px);
+}
+
+.title .title-right h5::before,
+.title .title-center h5::before {
+    right: calc(100% + 15px);
+}
+
+.title .title-left h1,
+.title .title-center h1,
+.title .title-right h1 {
+    border-bottom: 1px solid var(--bs-white);
+}
+
+
+/*** Service ***/
+.service-item {
+    position: relative;
+    margin-top: 2.5rem;
+    overflow: hidden;
+}
+
+.service-item .service-img {
+    position: relative;
+    display: inline-block;
+}
+
+.service-item .service-img::before {
+    position: absolute;
+    content: "";
+    width: calc(100% - 12rem);
+    height: calc(100% - 12rem);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3rem solid rgba(0, 0, 0, .5);
+    border-radius: 300px;
+    z-index: 1;
+}
+
+.service-item.service-item-left {
+    border-radius: 500px 0 0 500px;
+    background: linear-gradient(to right, var(--bs-secondary), var(--bs-dark));
+}
+
+.service-item.service-item-right {
+    border-radius: 0 500px 500px 0;
+    background: linear-gradient(to left, var(--bs-secondary), var(--bs-dark));
+}
+
+@media (max-width: 767.98px) {
+    .service-item.service-item-left,
+    .service-item.service-item-right {
+        border-radius: 500px 500px 0 0;
+        background: linear-gradient(to bottom, var(--bs-secondary), var(--bs-dark));
+        text-align: center;
+    }
+}
+
+
+/*** Portfolio ***/
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-item::before,
+.portfolio-item::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .7);
+    transition: .5s;
+}
+
+.portfolio-item::after {
+    left: auto;
+    right: 0;
+}
+
+.portfolio-item:hover::before,
+.portfolio-item:hover::after {
+    width: 50%;
+}
+
+.portfolio-item .portfolio-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+    z-index: 3;
+    opacity: 0;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    transition-delay: .5s;
+    opacity: 1;
+}
+
+.portfolio-item .portfolio-overlay .portfolio-btn {
+    display: flex;
+    margin: 5px;
+    margin-bottom: 60px;
+}
+
+.portfolio-item .portfolio-overlay .portfolio-name {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bs-primary);
+}
+
+
+/*** Team ***/
+.team-item {
+    position: relative;
+}
+
+.team-item .team-name {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .7);
+}
+
+.team-item .team-body {
+    position: relative;
+    overflow: hidden;
+}
+
+.team-item .team-body .team-before,
+.team-item .team-body .team-after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: calc(100% - 60px);
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: .5s;
+}
+
+.team-item .team-body .team-after {
+    left: auto;
+    right: 0;
+}
+
+.team-item .team-body .team-before {
+    text-align: right;
+}
+
+.team-item:hover .team-body .team-before,
+.team-item:hover .team-body .team-after {
+    width: 50%;
+}
+
+.team-item .team-body .team-before span,
+.team-item .team-body .team-after span {
+    margin: 5px;
+    color: var(--bs-white);
+    opacity: 0;
+    transition: .5s;
+}
+
+.team-item:hover .team-body .team-before span,
+.team-item:hover .team-body .team-after span {
+    opacity: 1;
+    transition-delay: .2s;
+}
+
+
+/*** Testimonial ***/
+.testimonial-carousel {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.testimonial-carousel .owl-stage-outer {
+    direction: ltr !important;
+}
+
+.testimonial-carousel .owl-stage {
+    direction: ltr !important;
+}
+
+.testimonial-carousel .owl-item {
+    direction:ltr !important;
+}
+
+/* Force testimonial content to be visible */
+.testimonial-item {
+    direction: rtl !important;
+    text-align: center !important;
+    min-height: 200px !important;
+    padding: 20px !important;
+    font-family: 'Noto Sans Arabic', Arial, sans-serif !important;
+}
+
+.testimonial-item p {
+    direction: rtl !important;
+    text-align: center !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 20px !important;
+    color: #ffffff !important;
+    font-family: 'Noto Sans Arabic', Arial, sans-serif !important;
+}
+
+.testimonial-item h5 {
+    direction: rtl !important;
+    text-align: center !important;
+    display: block !important;
+    visibility: visible !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    margin-bottom: 10px !important;
+    color: #ffffff !important;
+    font-family: 'Noto Sans Arabic', Arial, sans-serif !important;
+}
+
+.testimonial-item span {
+    direction: rtl !important;
+    text-align: center !important;
+    display: block !important;
+    visibility: visible !important;
+    font-size: 16px !important;
+    color: #007bff !important;
+    font-family: 'Noto Sans Arabic', Arial, sans-serif !important;
+}
+
+.testimonial-carousel .owl-dots {
+    margin-top: 35px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-carousel .owl-dots .owl-dot {
+    width: 60px;
+    height: 60px;
+    margin: 0 5px;
+    padding: 10px;
+    background: var(--bs-dark);
+    border-radius: 100px;
+    transition: .5s;
+}
+
+.testimonial-carousel .owl-dots .owl-dot.active {
+    width: 100px;
+    height: 100px;
+}
+
+.testimonial-carousel .owl-dots .owl-dot img {
+    opacity: .1;
+    transition: .5s;
+    border-radius: 100px;
+}
+
+.testimonial-carousel .owl-dots .owl-dot.active img {
+    opacity: 1;
+}
+
+/* Additional RTL fixes for testimonial content */
+[dir="rtl"] .testimonial-carousel .testimonial-item {
+    direction: rtl !important;
+    text-align: center !important;
+    unicode-bidi: bidi-override !important;
+}
+
+[dir="rtl"] .testimonial-carousel .testimonial-item p {
+    direction: rtl !important;
+    text-align: center !important;
+    font-size: 1.25rem !important;
+    line-height: 1.6 !important;
+    unicode-bidi: bidi-override !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+[dir="rtl"] .testimonial-carousel .testimonial-item h5 {
+    direction: rtl !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    margin-top: 1rem !important;
+    unicode-bidi: bidi-override !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+[dir="rtl"] .testimonial-carousel .testimonial-item span {
+    direction: rtl !important;
+    text-align: center !important;
+    font-size: 0.9rem !important;
+    unicode-bidi: bidi-override !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+
+/*** Footer ***/
+@keyframes footerAnimatedBg {
+	0% {
+        background-position: 0 0;
+    }
+
+	100% {
+        background-position: -1000px 0;
+    }
+}
+
+.footer {
+	background-image: url(../img/Gemini_Generated_Image_v6432zv6432zv643.png);
+	background-position: 0px 0px;
+    background-repeat: repeat-x;
+	animation: footerAnimatedBg 50s linear infinite;
+}
+
+/* Force primary color override */
+.text-primary {
+    color: #aed136 !important;
+}
+
+.btn-primary {
+    background-color: #aed136 !important;
+    border-color: #aed136 !important;
+}
+
+.btn-primary:hover {
+    background-color: #9bc12a !important;
+    border-color: #9bc12a !important;
+}
+
+.btn-outline-primary {
+    color: #aed136 !important;
+    border-color: #aed136 !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #ffffff !important;
+    border-color: #aed136 !important;
+}
+
+.bg-primary {
+    background-color: #aed136 !important;
+}
+
+.border-primary {
+    border-color: #aed136 !important;
+}
+
+/* Remove focus borders from all clickable elements */
+*:focus,
+*:active,
+*:focus-visible,
+.btn:focus,
+.btn:active,
+.btn:focus-visible,
+.nav-link:focus,
+.nav-link:active,
+.nav-link:focus-visible,
+a:focus,
+a:active,
+a:focus-visible,
+button:focus,
+button:active,
+button:focus-visible,
+[role="button"]:focus,
+[role="button"]:active,
+[role="button"]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* WOW Animation Fixes */
+.wow {
+    visibility: hidden;
+}
+
+.wow.animated {
+    visibility: visible;
+}
+
+/* Ensure fadeInUp animation works properly */
+.wow.fadeInUp {
+    animation-name: fadeInUp;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+/* Force animation to work on mobile */
+@media (max-width: 768px) {
+    .wow {
+        visibility: visible;
+        animation: none !important;
+    }
+}
+
+/* Additional animation support */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Ensure proper animation timing */
+.wow.fadeInUp[data-wow-delay] {
+    animation-delay: var(--wow-delay, 0.5s);
+}
+
+/* Force visibility for debugging */
+.wow.fadeInUp {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+    transition: all 0.6s ease-out;
+}
+
+.wow.fadeInUp.animated {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
