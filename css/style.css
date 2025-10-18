@@ -101,6 +101,15 @@
     right: auto;
 }
 
+/* RTL carousel control icons - reflect the arrow icons */
+[dir="rtl"] .carousel-control-prev-icon {
+    transform: scaleX(-1);
+}
+
+[dir="rtl"] .carousel-control-next-icon {
+    transform: scaleX(-1);
+}
+
 /* RTL service items */
 [dir="rtl"] .service-item-left .row {
     flex-direction: row-reverse;
@@ -847,7 +856,7 @@
 }
 
 .footer {
-	background-image: url(../img/Gemini_Generated_Image_v6432zv6432zv643.png);
+	background-image: url(../img/footer-bg.png);
 	background-position: 0px 0px;
     background-repeat: repeat-x;
 	animation: footerAnimatedBg 50s linear infinite;
@@ -962,3 +971,177 @@ button:focus-visible,
     opacity: 1;
     transform: translate3d(0, 0, 0);
 }
+
+/* Service Detail Page Styles */
+.service-icon {
+    margin-bottom: 1rem;
+}
+
+.process-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.process-number {
+    width: 60px;
+    height: 60px;
+    background: var(--bs-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+/* Page Header Styles */
+.page-header {
+    padding-top: 200px;
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/نســــأل\ أسئلـــــة\ أفضـــــل\ …_\ \(2\).png) top center no-repeat;
+    background-size: cover;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.page-header .title-center h1 {
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.page-header .title-center h5 {
+    color: #aed136;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Service Detail Content */
+.service-detail-content {
+    padding: 4rem 0;
+}
+
+.service-detail-content .title-left h1 {
+    color: var(--bs-dark);
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.service-detail-content .title-left h5 {
+    color: var(--bs-primary);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* Features Section */
+.features-section {
+    padding: 4rem 0;
+    background-color: #f8f9fa;
+}
+
+.features-section .service-item {
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.features-section .service-item:hover {
+    transform: translateY(-5px);
+}
+
+.features-section .service-item h4 {
+    color: var(--bs-dark);
+    margin-bottom: 1rem;
+}
+
+.features-section .service-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Process Section */
+.process-section {
+    padding: 4rem 0;
+}
+
+.process-section .process-icon {
+    margin-bottom: 2rem;
+}
+
+.process-section h4 {
+    color: var(--bs-dark);
+    margin-bottom: 1rem;
+}
+
+.process-section p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, var(--bs-secondary), var(--bs-dark));
+}
+
+.cta-section .title-center h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.cta-section .title-center h5 {
+    color: #aed136;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.cta-section p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-header {
+        padding-top: 150px;
+        min-height: 300px;
+    }
+    
+    .page-header .title-center h1 {
+        font-size: 2rem;
+    }
+    
+    .service-detail-content .title-left h1 {
+        font-size: 2rem;
+    }
+    
+    .cta-section .title-center h1 {
+        font-size: 2rem;
+    }
+}
+@media (max-width: 425px) {.carousel-caption h1 {
+    /* text-align: center; */
+    font-size: 1.2rem;
+}}
+
+@media (max-width: 1024px) {.carousel-caption h1 {
+    /* text-align: center; */
+    font-size: 1.2rem;
+}}
+
+@media (max-width: 320px) {.carousel-caption h1 {
+    /* text-align: center; */
+    font-size: 1.1rem;
+}}
+
+@media (max-width: 320px) {.carousel-caption p {
+    /* text-align: center; */
+    font-size: .9rem !important;
+}}
