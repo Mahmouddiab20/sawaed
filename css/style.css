@@ -548,8 +548,8 @@
 .service-item .service-img::before {
     position: absolute;
     content: "";
-    width: calc(100% - 12rem);
-    height: calc(100% - 12rem);
+    width: calc(100% - 8rem);
+    height: calc(100% - 8rem);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -855,6 +855,17 @@
     }
 }
 
+/* Mobile-friendly footer animation */
+@keyframes footerAnimatedBgMobile {
+	0% {
+        background-position: 0 0;
+    }
+
+	100% {
+        background-position: -500px 0;
+    }
+}
+
 .footer {
 	background-image: url(../img/footer-bg.png);
 	background-position: 0px 0px;
@@ -939,7 +950,12 @@ button:focus-visible,
 @media (max-width: 768px) {
     .wow {
         visibility: visible;
-        animation: none !important;
+        /* animation: none !important; */
+    }
+    
+    /* Ensure footer animation still works on mobile */
+    .footer {
+        animation: footerAnimatedBgMobile 30s linear infinite !important;
     }
 }
 
@@ -999,7 +1015,7 @@ button:focus-visible,
 /* Page Header Styles */
 .page-header {
     padding-top: 200px;
-    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/نســــأل\ أسئلـــــة\ أفضـــــل\ …_\ \(2\).png) top center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/نحن\ لا\ نعرف\ شئ.png) top center no-repeat;
     background-size: cover;
     min-height: 400px;
     display: flex;
@@ -1125,6 +1141,40 @@ button:focus-visible,
     .cta-section .title-center h1 {
         font-size: 2rem;
     }
+    
+    /* Footer mobile fixes */
+    .footer {
+        background-image: url(../img/footer-bg.png);
+        background-position: 0px 0px;
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        animation: footerAnimatedBgMobile 30s linear infinite !important;
+        min-height: 200px;
+    }
+}
+
+/* Additional mobile footer fixes for smaller screens */
+@media (max-width: 425px) {
+    .footer {
+        background-image: url(../img/footer-bg.png);
+        background-position: 0px 0px;
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        animation: footerAnimatedBgMobile 30s linear infinite !important;
+        min-height: 180px;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 320px) {
+    .footer {
+        background-image: url(../img/footer-bg.png);
+        background-position: 0px 0px;
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        animation: footerAnimatedBgMobile 30s linear infinite !important;
+        min-height: 160px;
+    }
 }
 @media (max-width: 425px) {.carousel-caption h1 {
     /* text-align: center; */
@@ -1144,4 +1194,12 @@ button:focus-visible,
 @media (max-width: 320px) {.carousel-caption p {
     /* text-align: center; */
     font-size: .9rem !important;
+}}
+
+@media (max-width: 768px){.d-flex.justify-content-center {
+    flex-direction: column !important;
+}}
+
+@media (max-width: 768px) {.carousel-control-prev-icon, .carousel-control-next-icon {
+    margin-top: 123px !important;
 }}
