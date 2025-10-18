@@ -1015,7 +1015,7 @@ button:focus-visible,
 /* Page Header Styles */
 .page-header {
     padding-top: 200px;
-    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/نحن\ لا\ نعرف\ شئ.png) top center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(../img/banner.png) top center no-repeat;
     background-size: cover;
     min-height: 400px;
     display: flex;
@@ -1195,6 +1195,11 @@ button:focus-visible,
     /* text-align: center; */
     font-size: .9rem !important;
 }}
+@media (max-width: 475px) {.carousel-caption p {
+    /* text-align: center; */
+    font-size: .9rem !important;
+}}
+
 
 @media (max-width: 768px){.d-flex.justify-content-center {
     flex-direction: column !important;
