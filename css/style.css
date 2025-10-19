@@ -1077,6 +1077,7 @@
 .btn-outline-primary {
     color: #aed136 !important;
     border-color: #aed136 !important;
+    background: black;
 }
 
 .btn-outline-primary:hover {
