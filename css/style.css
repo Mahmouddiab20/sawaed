@@ -1443,6 +1443,7 @@ button:focus-visible,
     .d-flex.justify-content-center:has(.btn-outline-primary) {
         flex-direction: row !important;
         flex-wrap: wrap !important;
+        
     }
 }
 
