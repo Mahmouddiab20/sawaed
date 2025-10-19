@@ -2,29 +2,38 @@
 
 /* Floating WhatsApp Button */
 .floating-whatsapp {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    animation: pulse 2s infinite;
+    position: fixed !important;
+    bottom: 100px !important;
+    left: 25px !important;
+    z-index: 1000 !important;
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(135deg, #aed136, #8bc34a) !important;
+    box-shadow: 0 8px 25px rgba(174, 209, 54, 0.4), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    animation: whatsappPulse 3s infinite, whatsappFloat 2s ease-in-out infinite !important;
+    border: 3px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .floating-whatsapp:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transform: scale(1.15) translateY(-5px) !important;
+    box-shadow: 0 12px 35px rgba(174, 209, 54, 0.6), 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    background: linear-gradient(135deg, #8bc34a, #aed136) !important;
 }
 
 .floating-whatsapp i {
-    font-size: 24px;
-    color: white;
+    font-size: 36px !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.floating-whatsapp:hover i {
+    transform: scale(1.1) !important;
 }
 
 @keyframes pulse {
@@ -39,17 +48,58 @@
     }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+@keyframes whatsappPulse {
+    0% {
+        box-shadow: 0 8px 25px rgba(174, 209, 54, 0.4), 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(174, 209, 54, 0.7);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(174, 209, 54, 0.4), 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 25px rgba(174, 209, 54, 0.1);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(174, 209, 54, 0.4), 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(174, 209, 54, 0);
+    }
+}
+
+@keyframes whatsappFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Large screens adjustments */
+@media (min-width: 1200px) {
     .floating-whatsapp {
-        bottom: 15px;
-        left: 15px;
-        width: 50px;
-        height: 50px;
+        width: 80px !important;
+        height: 80px !important;
+
+        bottom: 110px !important;
+        left: 30px !important;
     }
     
     .floating-whatsapp i {
-        font-size: 20px;
+        font-size: 40px !important;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .floating-whatsapp {
+        bottom: 90px !important;
+        left: 33px !important;
+        width: 70px !important;
+        height: 70px !important;
+        animation: whatsappPulse 3s infinite, whatsappFloat 2s ease-in-out infinite !important;
+    }
+    
+    .floating-whatsapp i {
+        font-size: 28px !important;
+    }
+    
+    .floating-whatsapp:hover {
+        transform: scale(1.1) translateY(-3px) !important;
     }
 }
 
@@ -369,6 +419,89 @@
     transition: opacity .5s ease-out, visibility 0s linear 0s;
     visibility: visible;
     opacity: 1;
+}
+
+.loading-favicon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.loading-favicon img {
+    animation: logoFloat 2s ease-in-out infinite, logoGlow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 128, 0.5));
+    transition: all 0.3s ease;
+}
+
+.loading-favicon::before {
+    content: '';
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    border: 2px solid #aed136;
+    border-radius: 50%;
+    animation: rotate 3s linear infinite;
+}
+
+.loading-favicon::after {
+    content: '';
+    position: absolute;
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid #aed136;
+    border-radius: 50%;
+    animation: rotate 4s linear infinite reverse;
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0px) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.05);
+    }
+}
+
+@keyframes logoGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(9, 255, 0, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 30px rgba(9, 255, 0, 0.8));
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading text animation */
+.loading-text {
+    position: absolute;
+    bottom: -5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #aed136;
+    font-size: 1.2rem;
+    font-weight: 600;
+    animation: textFade 2s ease-in-out infinite;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+@keyframes textFade {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 
