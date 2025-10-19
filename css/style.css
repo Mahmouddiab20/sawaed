@@ -1389,8 +1389,76 @@ button:focus-visible,
 
 
 @media (max-width: 768px){.d-flex.justify-content-center {
-    /* flex-direction: column !important; */
+    flex-direction: column !important;
 }}
+
+/* Social media icons - keep horizontal layout */
+.social-icons {
+    /* display: flex !important; */
+    /* justify-content: center !important; */
+    /* flex-direction: row !important; */
+    /* flex-wrap: wrap !important; */
+    /* gap: 0.5rem !important; */
+}
+
+.social-icons .btn {
+    flex-shrink: 0 !important;
+    min-width: 50px !important;
+    min-height: 50px !important;
+}
+
+/* Override the general d-flex rule for social media icons specifically */
+.d-flex.justify-content-center:has(.btn-outline-primary) {
+    /* flex-direction: row !important; */
+    /* flex-wrap: wrap !important; */
+}
+
+/* Alternative selector for social media containers */
+.footer .d-flex.justify-content-center {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+}
+
+/* Mobile responsive adjustments for social icons */
+@media (max-width: 768px) {
+    .social-icons {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    
+    .social-icons .btn {
+        min-width: 45px !important;
+        min-height: 45px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    /* Force horizontal layout for social media in footer */
+    .footer .d-flex.justify-content-center {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+    
+    /* Override the general rule for social media buttons */
+    .d-flex.justify-content-center:has(.btn-outline-primary) {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-icons .btn {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        font-size: 1rem !important;
+    }
+    
+    .footer .d-flex.justify-content-center .btn {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        font-size: 1rem !important;
+    }
+}
 
 @media (max-width: 768px) {.carousel-control-prev-icon, .carousel-control-next-icon {
     margin-top: 123px !important;
