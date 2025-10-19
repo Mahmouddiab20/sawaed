@@ -1388,7 +1388,7 @@ button:focus-visible,
 
 
 @media (max-width: 768px){.d-flex.justify-content-center {
-    flex-direction: column !important;
+    /* flex-direction: column !important; */
 }}
 
 @media (max-width: 768px) {.carousel-control-prev-icon, .carousel-control-next-icon {
