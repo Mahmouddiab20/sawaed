@@ -343,48 +343,61 @@
             document.getElementById('dashboardScreen').classList.add('d-none');
         }
 
-        // Load leads data (simulated data for demo)
+        // Load real leads data from Netlify Forms
         async function loadLeads() {
             try {
-                // For demo purposes, we'll use simulated data
-                // In a real implementation, you would fetch from Netlify Forms API
-                const simulatedLeads = [
-                    {
-                        id: 1,
-                        name: 'أحمد محمد',
-                        email: 'ahmed@example.com',
-                        phone: '+966501234567',
-                        subject: 'استفسار عن خدمات التسويق',
-                        message: 'أريد معرفة المزيد عن خدماتكم في التسويق الرقمي',
-                        created_at: new Date().toISOString()
-                    },
-                    {
-                        id: 2,
-                        name: 'فاطمة علي',
-                        email: 'fatima@example.com',
-                        phone: '+966507654321',
-                        subject: 'طلب عرض أسعار',
-                        message: 'أحتاج عرض أسعار لخدمات إدارة وسائل التواصل الاجتماعي',
-                        created_at: new Date(Date.now() - 86400000).toISOString()
-                    },
-                    {
-                        id: 3,
-                        name: 'محمد السعيد',
-                        email: 'mohammed@example.com',
-                        phone: '+966509876543',
-                        subject: 'استشارة تسويقية',
-                        message: 'أريد استشارة حول استراتيجية التسويق لمتجر إلكتروني',
-                        created_at: new Date(Date.now() - 172800000).toISOString()
-                    }
-                ];
+                // Show loading state
+                document.getElementById('totalLeads').textContent = '...';
+                document.getElementById('todayLeads').textContent = '...';
+                document.getElementById('weekLeads').textContent = '...';
+                document.getElementById('monthLeads').textContent = '...';
 
-                leadsData = simulatedLeads;
+                // Fetch from our Netlify Function
+                const response = await fetch('/.netlify/functions/get-form-submissions', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    leadsData = result.data;
+                } else {
+                    throw new Error(result.message || 'Failed to fetch data');
+                }
+
                 updateStatistics();
                 updateCharts();
                 updateLeadsTable(leadsData);
 
             } catch (error) {
                 console.error('Error loading leads:', error);
+                
+                // Fallback to local storage if API fails
+                const storedLeads = localStorage.getItem('sawaed_leads');
+                if (storedLeads) {
+                    leadsData = JSON.parse(storedLeads);
+                    updateStatistics();
+                    updateCharts();
+                    updateLeadsTable(leadsData);
+                } else {
+                    // Show error message
+                    document.getElementById('leadsTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                لا يمكن تحميل البيانات. يرجى المحاولة مرة أخرى.
+                            </td>
+                        </tr>
+                    `;
+                }
             }
         }
 
