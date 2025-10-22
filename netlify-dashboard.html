@@ -391,6 +391,7 @@
                 // Try to fetch from Netlify function
                 let response;
                 try {
+                    console.log('Fetching from Netlify function with token:', authToken);
                     response = await fetch('/.netlify/functions/simple-dashboard', {
                         method: 'GET',
                         headers: {
@@ -398,6 +399,7 @@
                             'Authorization': `Bearer ${authToken}`
                         }
                     });
+                    console.log('Response status:', response.status);
                 } catch (apiError) {
                     console.log('Netlify function not available, using sample data');
                     throw apiError;
@@ -410,11 +412,16 @@
                     if (result.success && result.data) {
                         leadsData = result.data;
                         dataSource = result.debug?.dataSource || 'unknown';
+                        console.log('Leads data loaded:', leadsData.length, 'items');
+                        console.log('Data source:', dataSource);
                         updateDataSourceIndicator();
                     } else {
+                        console.error('Invalid response from API:', result);
                         throw new Error('Invalid response from API');
                     }
                 } else {
+                    const errorText = await response.text();
+                    console.error('API request failed:', response.status, errorText);
                     throw new Error('API request failed with status: ' + response.status);
                 }
 

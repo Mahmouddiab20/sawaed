@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار المصادقة - Netlify Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>اختبار مصادقة Netlify Dashboard</h1>
+    
+    <div class="test-section info">
+        <h3>اختبار المصادقة</h3>
+        <button onclick="testAuth()">اختبار المصادقة</button>
+        <div id="authResult"></div>
+    </div>
+    
+    <div class="test-section info">
+        <h3>اختبار البيانات</h3>
+        <button onclick="testData()">اختبار البيانات</button>
+        <div id="dataResult"></div>
+    </div>
+
+    <script>
+        async function testAuth() {
+            const resultDiv = document.getElementById('authResult');
+            resultDiv.innerHTML = '<p>جاري الاختبار...</p>';
+            
+            try {
+                const response = await fetch('/.netlify/functions/simple-dashboard', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sawaed-admin-2024'
+                    }
+                });
+                
+                const responseText = await response.text();
+                console.log('Response:', responseText);
+                
+                if (response.ok) {
+                    try {
+                        const data = JSON.parse(responseText);
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ المصادقة نجحت</h4>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </div>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ خطأ في تحليل JSON</h4>
+                                <pre>${responseText}</pre>
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ فشل المصادقة</h4>
+                            <p>Status: ${response.status}</p>
+                            <pre>${responseText}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ خطأ في الطلب</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testData() {
+            const resultDiv = document.getElementById('dataResult');
+            resultDiv.innerHTML = '<p>جاري تحميل البيانات...</p>';
+            
+            try {
+                const response = await fetch('/.netlify/functions/simple-dashboard', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sawaed-admin-2024'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success && data.data) {
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ البيانات محملة بنجاح</h4>
+                                <p>عدد العناصر: ${data.data.length}</p>
+                                <p>مصدر البيانات: ${data.debug?.dataSource || 'غير محدد'}</p>
+                                <pre>${JSON.stringify(data.data.slice(0, 2), null, 2)}</pre>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ بيانات غير صحيحة</h4>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </div>
+                        `;
+                    }
+                } else {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ فشل في تحميل البيانات</h4>
+                            <p>Status: ${response.status}</p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ خطأ في الطلب</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

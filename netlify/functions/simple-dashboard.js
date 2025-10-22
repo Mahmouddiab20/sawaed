@@ -20,16 +20,48 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        // Simple authentication check
-        const authHeader = event.headers.authorization;
-        if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_TOKEN || 'sawaed-admin-2024'}`) {
+        // Simple authentication check - make it more flexible
+        const authHeader = event.headers.authorization || event.headers.Authorization;
+        const adminToken = process.env.ADMIN_TOKEN || 'sawaed-admin-2024';
+        
+        // Check if authorization header exists and matches
+        if (!authHeader) {
+            console.log('No authorization header found');
             return {
                 statusCode: 401,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*'
                 },
-                body: JSON.stringify({ success: false, message: 'Unauthorized' })
+                body: JSON.stringify({ 
+                    success: false, 
+                    message: 'No authorization header provided',
+                    debug: {
+                        expected: `Bearer ${adminToken}`,
+                        received: authHeader
+                    }
+                })
+            };
+        }
+        
+        // Check if the token matches (with or without Bearer prefix)
+        const token = authHeader.replace('Bearer ', '');
+        if (token !== adminToken) {
+            console.log('Token mismatch:', { expected: adminToken, received: token });
+            return {
+                statusCode: 401,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({ 
+                    success: false, 
+                    message: 'Invalid authorization token',
+                    debug: {
+                        expected: adminToken,
+                        received: token
+                    }
+                })
             };
         }
 
