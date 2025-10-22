@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار نظام العملاء المحتملين - سواعد</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 50px auto;
+            max-width: 600px;
+        }
+        .test-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+        .form-section {
+            padding: 30px;
+        }
+        .btn-test {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-test:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-container">
+            <div class="test-header">
+                <h2><i class="fas fa-flask me-2"></i>اختبار نظام العملاء المحتملين</h2>
+                <p class="mb-0">تأكد من أن نظام تتبع العملاء يعمل بشكل صحيح</p>
+            </div>
+            
+            <div class="form-section">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>تعليمات الاختبار:</strong>
+                    <ol class="mb-0 mt-2">
+                        <li>املأ النموذج أدناه وارسل البيانات</li>
+                        <li>تحقق من لوحة التحكم في <code>admin/dashboard.php</code></li>
+                        <li>يجب أن تظهر البيانات الجديدة في جدول العملاء المحتملين</li>
+                    </ol>
+                </div>
+
+                <form id="testForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">الاسم الكامل *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">رقم الهاتف</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="subject" class="form-label">الموضوع</label>
+                            <select class="form-select" id="subject" name="subject">
+                                <option value="استفسار عام">استفسار عام</option>
+                                <option value="طلب استشارة">طلب استشارة</option>
+                                <option value="عرض أسعار">عرض أسعار</option>
+                                <option value="طلب وظيفة">طلب وظيفة</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">الرسالة *</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required placeholder="اكتب رسالتك هنا..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="consent" name="consent" required>
+                        <label class="form-check-label" for="consent">
+                            أوافق على تتبع بياناتي لأغراض التسويق والتحليل *
+                        </label>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-test">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            إرسال البيانات للاختبار
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="result" class="mt-4" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+            
+            // Show loading
+            resultDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-spinner fa-spin me-2"></i>جاري الإرسال...</div>';
+            resultDiv.style.display = 'block';
+            
+            fetch('api/contact_handler.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>تم الإرسال بنجاح!</strong><br>
+                            ${data.message}<br>
+                            <small class="text-muted">تحقق من لوحة التحكم لرؤية البيانات الجديدة</small>
+                        </div>
+                    `;
+                    this.reset();
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>خطأ في الإرسال:</strong><br>
+                            ${data.message}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>خطأ في الاتصال:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -9,8 +9,8 @@
 // Database configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'sawaed_leads');
-define('DB_USER', 'your_username');
-define('DB_PASS', 'your_password');
+define('DB_USER', 'root'); // Change to your MySQL username
+define('DB_PASS', ''); // Change to your MySQL password
 define('DB_CHARSET', 'utf8mb4');
 
 // Geolocation API configuration

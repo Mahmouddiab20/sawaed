@@ -25,6 +25,11 @@ $geo = new IPGeolocation($db, get_config('geolocation_api_key'), get_config('geo
 $analytics = $geo->get_analytics(30); // Last 30 days
 $recent_leads = $geo->get_recent_leads(50);
 
+// If no real leads found, show message
+if (empty($recent_leads)) {
+    $recent_leads = [];
+}
+
 // Calculate summary statistics
 $total_leads = count($recent_leads);
 $contact_leads = count(array_filter($recent_leads, function($lead) { return $lead['form_type'] === 'contact'; }));
@@ -230,6 +235,23 @@ arsort($geo_distribution);
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if (empty($recent_leads)): ?>
+                                <tr>
+                                    <td colspan="8" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                                            <h5>لا توجد عملاء محتملين بعد</h5>
+                                            <p>لم يتم إرسال أي نماذج تواصل حتى الآن.</p>
+                                            <div class="mt-3">
+                                                <a href="../contact.html" class="btn btn-primary" target="_blank">
+                                                    <i class="fas fa-external-link-alt me-2"></i>
+                                                    اختبار نموذج التواصل
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php else: ?>
                                 <?php foreach ($recent_leads as $lead): ?>
                                 <tr>
                                     <td>
@@ -276,6 +298,7 @@ arsort($geo_distribution);
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
