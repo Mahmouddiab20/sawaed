@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - سواعد للتسويق الرقمي</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Contact Form Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">تواصل معنا</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Netlify Form -->
+                        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                            <input type="hidden" name="form-name" value="contact" />
+                            <p style="display: none;">
+                                <label>Don't fill this out: <input name="bot-field" /></label>
+                            </p>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="اسمك" required>
+                                        <label for="name">اسمك *</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="بريدك الإلكتروني" required>
+                                        <label for="email">بريدك الإلكتروني *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="رقم الهاتف">
+                                        <label for="phone">رقم الهاتف</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="الموضوع" required>
+                                        <label for="subject">الموضوع *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="message" name="message" placeholder="اكتب رسالتك هنا" style="height: 150px;" required></textarea>
+                                        <label for="message">الرسالة *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                                        <label class="form-check-label" for="consent">
+                                            أوافق على سياسة الخصوصية وجمع البيانات لأغراض التسويق *
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary btn-lg w-100" type="submit">
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        إرسال الرسالة
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Success Message (hidden by default) -->
+                        <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                            <i class="fas fa-check-circle me-2"></i>
+                            تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Analytics for Visitor Tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+    <!-- Form Success Handler -->
+    <script>
+        // Check if form was submitted successfully
+        if (window.location.search.includes('success=true')) {
+            document.getElementById('successMessage').style.display = 'block';
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

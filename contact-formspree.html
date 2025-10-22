@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - سواعد للتسويق الرقمي</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Contact Form Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">تواصل معنا</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Formspree Form -->
+                        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="اسمك" required>
+                                        <label for="name">اسمك *</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="بريدك الإلكتروني" required>
+                                        <label for="email">بريدك الإلكتروني *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="رقم الهاتف">
+                                        <label for="phone">رقم الهاتف</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="الموضوع" required>
+                                        <label for="subject">الموضوع *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="message" name="message" placeholder="اكتب رسالتك هنا" style="height: 150px;" required></textarea>
+                                        <label for="message">الرسالة *</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                                        <label class="form-check-label" for="consent">
+                                            أوافق على سياسة الخصوصية وجمع البيانات لأغراض التسويق *
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary btn-lg w-100" type="submit" id="submitBtn">
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        <span class="btn-text">
+                                            <i class="fas fa-paper-plane me-2"></i>
+                                            إرسال الرسالة
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Success/Error Messages -->
+                        <div id="formMessages" class="mt-3" style="display: none;">
+                            <div class="alert alert-success" id="successMessage" style="display: none;">
+                                <i class="fas fa-check-circle me-2"></i>
+                                تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.
+                            </div>
+                            <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                حدث خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Analytics for Visitor Tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+    <!-- Form Handler -->
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = submitBtn.querySelector('.spinner-border');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const formMessages = document.getElementById('formMessages');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            btnText.textContent = 'جاري الإرسال...';
+            
+            // Hide previous messages
+            formMessages.style.display = 'none';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    formMessages.style.display = 'block';
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Scroll to message
+                    formMessages.scrollIntoView({ behavior: 'smooth' });
+                    
+                } else {
+                    throw new Error('Form submission failed');
+                }
+                
+            } catch (error) {
+                console.error('Form submission error:', error);
+                
+                // Show error message
+                errorMessage.style.display = 'block';
+                formMessages.style.display = 'block';
+                
+                // Scroll to message
+                formMessages.scrollIntoView({ behavior: 'smooth' });
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+                btnText.innerHTML = '<i class="fas fa-paper-plane me-2"></i>إرسال الرسالة';
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
