@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم سواعد - إدارة العملاء المحتملين</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .dashboard-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .lead-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .lead-table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .lead-table td {
+            border: none;
+            border-bottom: 1px solid #f1f3f4;
+            vertical-align: middle;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .badge-custom {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen (shown by default) -->
+    <div id="loginScreen" class="login-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-card">
+                        <div class="login-header">
+                            <i class="fas fa-chart-line fa-3x mb-3"></i>
+                            <h3>لوحة تحكم سواعد</h3>
+                            <p class="mb-0">إدارة العملاء المحتملين</p>
+                        </div>
+                        <div class="p-4">
+                            <div id="loginError" class="alert alert-danger d-none" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <span id="loginErrorText"></span>
+                            </div>
+                            
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">اسم المستخدم</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">كلمة المرور</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i>
+                                        تسجيل الدخول
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div class="text-center mt-4">
+                                <small class="text-muted">
+                                    <i class="fas fa-shield-alt me-1"></i>
+                                    نظام آمن ومحمي
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (hidden by default) -->
+    <div id="dashboardScreen" class="d-none">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-chart-line me-2"></i>
+                    لوحة تحكم سواعد
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-1"></i>
+                        تسجيل الخروج
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid py-4">
+            <!-- Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-2">مرحباً بك في لوحة التحكم</h2>
+                                <p class="mb-0">إحصائيات وتتبع العملاء المحتملين</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <i class="fas fa-users" style="font-size: 4rem; opacity: 0.3;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalLeads">0</div>
+                        <div class="stat-label">إجمالي العملاء المحتملين</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayLeads">0</div>
+                        <div class="stat-label">عملاء اليوم</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="weekLeads">0</div>
+                        <div class="stat-label">عملاء هذا الأسبوع</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="monthLeads">0</div>
+                        <div class="stat-label">عملاء هذا الشهر</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row mb-4">
+                <div class="col-lg-6 mb-3">
+                    <div class="chart-container">
+                        <h5 class="mb-3">الإحصائيات اليومية</h5>
+                        <canvas id="dailyChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <div class="chart-container">
+                        <h5 class="mb-3">الإحصائيات الشهرية</h5>
+                        <canvas id="monthlyChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Leads Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="lead-table">
+                        <div class="p-3 border-bottom">
+                            <h5 class="mb-0">العملاء المحتملين الأخيرين</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>البريد الإلكتروني</th>
+                                        <th>الهاتف</th>
+                                        <th>الموضوع</th>
+                                        <th>التاريخ</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leadsTableBody">
+                                    <!-- Leads will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Details Modal -->
+    <div class="modal fade" id="leadModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تفاصيل العميل المحتمل</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="leadDetails">
+                    <!-- Lead details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let authToken = null;
+        let leadsData = [];
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple authentication
+            if (username === 'admin' && password === 'sawaed2024') {
+                authToken = 'sawaed-admin-2024';
+                localStorage.setItem('sawaed_auth_token', authToken);
+                showDashboard();
+                loadLeads();
+            } else {
+                showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة');
+            }
+        });
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedToken = localStorage.getItem('sawaed_auth_token');
+            if (savedToken) {
+                authToken = savedToken;
+                showDashboard();
+                loadLeads();
+            }
+        });
+
+        function showLoginError(message) {
+            const errorDiv = document.getElementById('loginError');
+            const errorText = document.getElementById('loginErrorText');
+            errorText.textContent = message;
+            errorDiv.classList.remove('d-none');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('d-none');
+            document.getElementById('dashboardScreen').classList.remove('d-none');
+        }
+
+        function logout() {
+            authToken = null;
+            localStorage.removeItem('sawaed_auth_token');
+            document.getElementById('loginScreen').classList.remove('d-none');
+            document.getElementById('dashboardScreen').classList.add('d-none');
+        }
+
+        // Load leads data (simulated data for demo)
+        async function loadLeads() {
+            try {
+                // For demo purposes, we'll use simulated data
+                // In a real implementation, you would fetch from Netlify Forms API
+                const simulatedLeads = [
+                    {
+                        id: 1,
+                        name: 'أحمد محمد',
+                        email: 'ahmed@example.com',
+                        phone: '+966501234567',
+                        subject: 'استفسار عن خدمات التسويق',
+                        message: 'أريد معرفة المزيد عن خدماتكم في التسويق الرقمي',
+                        created_at: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        name: 'فاطمة علي',
+                        email: 'fatima@example.com',
+                        phone: '+966507654321',
+                        subject: 'طلب عرض أسعار',
+                        message: 'أحتاج عرض أسعار لخدمات إدارة وسائل التواصل الاجتماعي',
+                        created_at: new Date(Date.now() - 86400000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        name: 'محمد السعيد',
+                        email: 'mohammed@example.com',
+                        phone: '+966509876543',
+                        subject: 'استشارة تسويقية',
+                        message: 'أريد استشارة حول استراتيجية التسويق لمتجر إلكتروني',
+                        created_at: new Date(Date.now() - 172800000).toISOString()
+                    }
+                ];
+
+                leadsData = simulatedLeads;
+                updateStatistics();
+                updateCharts();
+                updateLeadsTable(leadsData);
+
+            } catch (error) {
+                console.error('Error loading leads:', error);
+            }
+        }
+
+        function updateStatistics() {
+            const today = new Date().toDateString();
+            const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+            const todayLeads = leadsData.filter(lead => new Date(lead.created_at).toDateString() === today).length;
+            const weekLeads = leadsData.filter(lead => new Date(lead.created_at) >= weekAgo).length;
+            const monthLeads = leadsData.filter(lead => new Date(lead.created_at) >= monthAgo).length;
+
+            document.getElementById('totalLeads').textContent = leadsData.length;
+            document.getElementById('todayLeads').textContent = todayLeads;
+            document.getElementById('weekLeads').textContent = weekLeads;
+            document.getElementById('monthLeads').textContent = monthLeads;
+        }
+
+        function updateCharts() {
+            // Daily chart
+            const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+                const dayLeads = leadsData.filter(lead => 
+                    new Date(lead.created_at).toDateString() === date.toDateString()
+                ).length;
+                last7Days.push(dayLeads);
+            }
+            
+            new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6 أيام مضت', '5 أيام مضت', '4 أيام مضت', '3 أيام مضت', '2 أيام مضت', 'أمس', 'اليوم'],
+                    datasets: [{
+                        label: 'عدد العملاء',
+                        data: last7Days,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Monthly chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const last6Months = [];
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date();
+                date.setMonth(date.getMonth() - i);
+                const monthLeads = leadsData.filter(lead => {
+                    const leadDate = new Date(lead.created_at);
+                    return leadDate.getMonth() === date.getMonth() && leadDate.getFullYear() === date.getFullYear();
+                }).length;
+                last6Months.push(monthLeads);
+            }
+            
+            new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['6 شهور مضت', '5 شهور مضت', '4 شهور مضت', '3 شهور مضت', 'شهرين مضى', 'الشهر الماضي'],
+                    datasets: [{
+                        label: 'عدد العملاء',
+                        data: last6Months,
+                        backgroundColor: '#28a745'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateLeadsTable(leads) {
+            const tbody = document.getElementById('leadsTableBody');
+            tbody.innerHTML = '';
+
+            leads.forEach(lead => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary text-white rounded-circle me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                ${lead.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            ${lead.name}
+                        </div>
+                    </td>
+                    <td>${lead.email}</td>
+                    <td>${lead.phone || 'غير محدد'}</td>
+                    <td>${lead.subject}</td>
+                    <td>${new Date(lead.created_at).toLocaleDateString('ar-SA')}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm" onclick="viewLead(${lead.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewLead(leadId) {
+            const lead = leadsData.find(l => l.id == leadId);
+            if (lead) {
+                const details = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">معلومات العميل</h6>
+                            <table class="table table-sm">
+                                <tr><td><strong>الاسم:</strong></td><td>${lead.name}</td></tr>
+                                <tr><td><strong>البريد الإلكتروني:</strong></td><td><a href="mailto:${lead.email}">${lead.email}</a></td></tr>
+                                <tr><td><strong>الهاتف:</strong></td><td>${lead.phone || 'غير محدد'}</td></tr>
+                                <tr><td><strong>الموضوع:</strong></td><td>${lead.subject}</td></tr>
+                                <tr><td><strong>التاريخ:</strong></td><td>${new Date(lead.created_at).toLocaleString('ar-SA')}</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">الرسالة</h6>
+                            <div class="bg-light p-3 rounded">
+                                ${lead.message}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('leadDetails').innerHTML = details;
+                new bootstrap.Modal(document.getElementById('leadModal')).show();
+            }
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(function() {
+            if (authToken) {
+                loadLeads();
+            }
+        }, 300000);
+    </script>
+</body>
+</html>
