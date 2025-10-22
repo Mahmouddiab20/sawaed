@@ -358,6 +358,28 @@
                 showDashboard();
                 loadLeads();
             }
+            
+            // Add a test button for debugging
+            setTimeout(() => {
+                const testButton = document.createElement('button');
+                testButton.innerHTML = '🔧 Test Update Display';
+                testButton.style.position = 'fixed';
+                testButton.style.top = '10px';
+                testButton.style.left = '10px';
+                testButton.style.zIndex = '9999';
+                testButton.style.background = '#007bff';
+                testButton.style.color = 'white';
+                testButton.style.border = 'none';
+                testButton.style.padding = '5px 10px';
+                testButton.style.borderRadius = '3px';
+                testButton.onclick = function() {
+                    console.log('Manual test - Current leadsData:', leadsData);
+                    updateStatistics();
+                    updateCharts();
+                    updateLeadsTable(leadsData);
+                };
+                document.body.appendChild(testButton);
+            }, 2000);
         });
 
         function showLoginError(message) {
@@ -425,9 +447,12 @@
                     throw new Error('API request failed with status: ' + response.status);
                 }
 
+                console.log('About to update dashboard with:', leadsData.length, 'leads');
+                console.log('Leads data before update:', leadsData);
                 updateStatistics();
                 updateCharts();
                 updateLeadsTable(leadsData);
+                console.log('Dashboard update completed');
 
             } catch (error) {
                 console.error('Error loading leads:', error);
@@ -505,6 +530,7 @@
         }
 
         function updateStatistics() {
+            console.log('updateStatistics called with:', leadsData.length, 'leads');
             const today = new Date().toDateString();
             const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -513,10 +539,19 @@
             const weekLeads = leadsData.filter(lead => new Date(lead.created_at) >= weekAgo).length;
             const monthLeads = leadsData.filter(lead => new Date(lead.created_at) >= monthAgo).length;
 
+            console.log('Statistics:', {
+                total: leadsData.length,
+                today: todayLeads,
+                week: weekLeads,
+                month: monthLeads
+            });
+
             document.getElementById('totalLeads').textContent = leadsData.length;
             document.getElementById('todayLeads').textContent = todayLeads;
             document.getElementById('weekLeads').textContent = weekLeads;
             document.getElementById('monthLeads').textContent = monthLeads;
+            
+            console.log('Statistics updated in DOM');
         }
 
         function updateCharts() {
