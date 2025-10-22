@@ -14,7 +14,7 @@
 // }
 
 // Include required files
-require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/database_sqlite.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

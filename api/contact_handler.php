@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Include required files
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/database_sqlite.php';
 require_once __DIR__ . '/../includes/ip_geolocation.php';
 
 // Start session for consent tracking
