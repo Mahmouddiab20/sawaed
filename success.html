@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم الإرسال بنجاح - سواعد للتسويق الرقمي</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .success-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .success-body {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="success-card">
+                    <div class="success-header">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <h2 class="mb-0">تم الإرسال بنجاح!</h2>
+                    </div>
+                    <div class="success-body">
+                        <div class="success-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h4 class="text-primary mb-3">شكراً لك!</h4>
+                        <p class="mb-4">تم إرسال رسالتك بنجاح وسنتواصل معك قريباً.</p>
+                        <p class="text-muted mb-4">عادة ما نرد على الرسائل خلال 24 ساعة.</p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="/" class="btn btn-primary btn-lg">
+                                <i class="fas fa-home me-2"></i>
+                                العودة للصفحة الرئيسية
+                            </a>
+                            <a href="/contact.html" class="btn btn-outline-primary">
+                                <i class="fas fa-envelope me-2"></i>
+                                إرسال رسالة أخرى
+                            </a>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                تم الإرسال في: <span id="timestamp"></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Set timestamp -->
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('ar-SA');
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

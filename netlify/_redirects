@@ -1,11 +1,7 @@
 # Netlify redirects and rewrites
 
-# API Functions
-/api/contact-handler /.netlify/functions/contact-handler 200
-/api/job-application-handler /.netlify/functions/job-application-handler 200
-/api/consent-handler /.netlify/functions/consent-handler 200
-/api/get-leads /.netlify/functions/get-leads 200
-/api/delete-lead /.netlify/functions/delete-lead 200
+# Form success redirect
+/contact.html?success=true /success.html 200
 
 # Admin dashboard (static HTML)
 /admin/dashboard /admin-dashboard.html 200

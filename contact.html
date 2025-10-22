@@ -146,14 +146,19 @@
                     </table>
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <form id="contactForm" novalidate>
+                    <!-- Netlify Form -->
+                    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+                        <input type="hidden" name="form-name" value="contact" />
+                        <p style="display: none;">
+                            <label>Don't fill this out: <input name="bot-field" /></label>
+                        </p>
+                        
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input type="text" class="form-control bg-secondary border-0" id="name"
                                         name="name" placeholder="اسمك" style="text-align: right;" required>
                                     <label for="name">اسمك *</label>
-                                    <div class="invalid-feedback">الاسم مطلوب</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -161,7 +166,6 @@
                                     <input type="email" class="form-control bg-secondary border-0" id="email"
                                         name="email" placeholder="بريدك الإلكتروني" style="text-align: right;" required>
                                     <label for="email">بريدك الإلكتروني *</label>
-                                    <div class="invalid-feedback">البريد الإلكتروني صحيح مطلوب</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -176,7 +180,6 @@
                                     <input type="text" class="form-control bg-secondary border-0" id="subject"
                                         name="subject" placeholder="الموضوع" style="text-align: right;" required>
                                     <label for="subject">الموضوع *</label>
-                                    <div class="invalid-feedback">الموضوع مطلوب</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -184,7 +187,6 @@
                                     <textarea class="form-control bg-secondary border-0" placeholder="اكتب رسالتك هنا"
                                         id="message" name="message" style="height: 150px; text-align: right;" required></textarea>
                                     <label for="message">الرسالة *</label>
-                                    <div class="invalid-feedback">الرسالة مطلوبة</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -194,7 +196,6 @@
                                         أوافق على <a href="#" class="text-primary" onclick="privacyBanner.showDetails()">سياسة الخصوصية</a> 
                                         وجمع البيانات لأغراض التسويق *
                                     </label>
-                                    <div class="invalid-feedback">يجب الموافقة على سياسة الخصوصية</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -285,7 +286,7 @@
     <!-- Privacy Banner -->
     <script src="js/privacy-banner.js"></script>
     
-    <!-- Contact Form Handler -->
+    <!-- Netlify Form Handler -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const contactForm = document.getElementById('contactForm');
@@ -298,74 +299,27 @@
             const successText = document.getElementById('successText');
             const errorText = document.getElementById('errorText');
             
-            contactForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Reset messages
-                formMessages.style.display = 'none';
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
-                
+            // Check if form was submitted successfully (Netlify redirects to success page)
+            if (window.location.search.includes('success=true')) {
+                successText.textContent = 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.';
+                successMessage.style.display = 'block';
+                formMessages.style.display = 'block';
+                formMessages.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            contactForm.addEventListener('submit', function(e) {
                 // Show loading state
                 submitBtn.disabled = true;
                 spinner.classList.remove('d-none');
                 btnText.textContent = 'جاري الإرسال...';
                 
-                try {
-                    const formData = new FormData(contactForm);
-                    
-                    const response = await fetch('/api/contact_handler.php', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        // Show success message
-                        successText.textContent = result.message;
-                        successMessage.style.display = 'block';
-                        formMessages.style.display = 'block';
-                        
-                        // Reset form
-                        contactForm.reset();
-                        contactForm.classList.remove('was-validated');
-                        
-                        // Scroll to message
-                        formMessages.scrollIntoView({ behavior: 'smooth' });
-                        
-                    } else {
-                        // Show error message
-                        errorText.textContent = result.message;
-                        if (result.errors) {
-                            errorText.textContent += '\n' + result.errors.join('\n');
-                        }
-                        errorMessage.style.display = 'block';
-                        formMessages.style.display = 'block';
-                        
-                        // Show validation errors
-                        if (result.errors) {
-                            result.errors.forEach(error => {
-                                // Find corresponding field and show error
-                                const field = contactForm.querySelector(`[name="${error.field}"]`);
-                                if (field) {
-                                    field.classList.add('is-invalid');
-                                }
-                            });
-                        }
-                    }
-                    
-                } catch (error) {
-                    console.error('Form submission error:', error);
-                    errorText.textContent = 'حدث خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.';
-                    errorMessage.style.display = 'block';
-                    formMessages.style.display = 'block';
-                } finally {
-                    // Reset button state
-                    submitBtn.disabled = false;
-                    spinner.classList.add('d-none');
-                    btnText.textContent = 'إرسال الرسالة';
-                }
+                // Hide previous messages
+                formMessages.style.display = 'none';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Let Netlify handle the form submission
+                // The form will redirect to a success page or show an error
             });
             
             // Real-time validation
@@ -385,17 +339,13 @@
             function validateField(field) {
                 const value = field.value.trim();
                 let isValid = true;
-                let errorMessage = '';
                 
                 if (field.hasAttribute('required') && !value) {
                     isValid = false;
-                    errorMessage = field.getAttribute('data-required-message') || 'هذا الحقل مطلوب';
                 } else if (field.type === 'email' && value && !isValidEmail(value)) {
                     isValid = false;
-                    errorMessage = 'البريد الإلكتروني غير صحيح';
                 } else if (field.type === 'tel' && value && !isValidPhone(value)) {
                     isValid = false;
-                    errorMessage = 'رقم الهاتف غير صحيح';
                 }
                 
                 if (isValid) {
