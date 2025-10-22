@@ -133,7 +133,7 @@
             resultDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-spinner fa-spin me-2"></i>جاري الإرسال...</div>';
             resultDiv.style.display = 'block';
             
-            fetch('api/contact_handler.php', {
+            fetch('api/contact_handler_simple.php', {
                 method: 'POST',
                 body: formData
             })
