@@ -356,10 +356,10 @@
                 document.getElementById('weekLeads').textContent = '...';
                 document.getElementById('monthLeads').textContent = '...';
 
-                // Try to fetch from local PHP API first
+                // Try to fetch from simple PHP API first
                 let response;
                 try {
-                    response = await fetch('admin/api/get_lead_details.php?all=1', {
+                    response = await fetch('admin/api/get_leads_simple.php', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'
@@ -388,7 +388,7 @@
             } catch (error) {
                 console.error('Error loading leads:', error);
                 
-                // Use sample data as fallback
+                // Use comprehensive sample data as fallback
                 leadsData = [
                     {
                         id: 1,
@@ -397,6 +397,8 @@
                         phone: '+966501234567',
                         subject: 'استفسار عن خدمات التسويق',
                         message: 'أرغب في معرفة المزيد عن خدماتكم في التسويق الرقمي',
+                        form_type: 'contact',
+                        consent_given: 1,
                         created_at: new Date().toISOString()
                     },
                     {
@@ -406,6 +408,8 @@
                         phone: '+966509876543',
                         subject: 'طلب استشارة',
                         message: 'أحتاج استشارة حول استراتيجية التسويق لشركتي',
+                        form_type: 'consultation',
+                        consent_given: 1,
                         created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
                     },
                     {
@@ -415,7 +419,31 @@
                         phone: '+966501112233',
                         subject: 'طلب وظيفة',
                         message: 'أرغب في التقدم لوظيفة في مجال التسويق الرقمي',
+                        form_type: 'job_application',
+                        consent_given: 0,
                         created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: 4,
+                        name: 'سارة أحمد',
+                        email: 'sara@example.com',
+                        phone: '+966502223344',
+                        subject: 'استفسار عن الأسعار',
+                        message: 'أريد معرفة أسعار خدماتكم في الإعلانات',
+                        form_type: 'contact',
+                        consent_given: 1,
+                        created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: 5,
+                        name: 'خالد النعيمي',
+                        email: 'khalid@example.com',
+                        phone: '+966503334455',
+                        subject: 'طلب عرض أسعار',
+                        message: 'أحتاج عرض أسعار لحملة إعلانية شاملة',
+                        form_type: 'contact',
+                        consent_given: 1,
+                        created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
                     }
                 ];
 
