@@ -146,41 +146,77 @@
                     </table>
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <form>
+                    <form id="contactForm" novalidate>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input type="text" class="form-control bg-secondary border-0" id="name"
-                                        placeholder="اسمك" style="text-align: right;">
-                                    <label for="name">اسمك</label>
+                                        name="name" placeholder="اسمك" style="text-align: right;" required>
+                                    <label for="name">اسمك *</label>
+                                    <div class="invalid-feedback">الاسم مطلوب</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input type="email" class="form-control bg-secondary border-0" id="email"
-                                        placeholder="بريدك الإلكتروني" style="text-align: right;">
-                                    <label for="email">بريدك الإلكتروني</label>
+                                        name="email" placeholder="بريدك الإلكتروني" style="text-align: right;" required>
+                                    <label for="email">بريدك الإلكتروني *</label>
+                                    <div class="invalid-feedback">البريد الإلكتروني صحيح مطلوب</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control bg-secondary border-0" id="phone"
+                                        name="phone" placeholder="رقم الهاتف" style="text-align: right;">
+                                    <label for="phone">رقم الهاتف</label>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
                                     <input type="text" class="form-control bg-secondary border-0" id="subject"
-                                        placeholder="الموضوع" style="text-align: right;">
-                                    <label for="subject">الموضوع</label>
+                                        name="subject" placeholder="الموضوع" style="text-align: right;" required>
+                                    <label for="subject">الموضوع *</label>
+                                    <div class="invalid-feedback">الموضوع مطلوب</div>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
                                     <textarea class="form-control bg-secondary border-0" placeholder="اكتب رسالتك هنا"
-                                        id="message" style="height: 150px; text-align: right;"></textarea>
-                                    <label for="message">الرسالة</label>
+                                        id="message" name="message" style="height: 150px; text-align: right;" required></textarea>
+                                    <label for="message">الرسالة *</label>
+                                    <div class="invalid-feedback">الرسالة مطلوبة</div>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-outline-primary border-2 w-100 py-3" type="submit">إرسال الرسالة</button>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                                    <label class="form-check-label" for="consent">
+                                        أوافق على <a href="#" class="text-primary" onclick="privacyBanner.showDetails()">سياسة الخصوصية</a> 
+                                        وجمع البيانات لأغراض التسويق *
+                                    </label>
+                                    <div class="invalid-feedback">يجب الموافقة على سياسة الخصوصية</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-outline-primary border-2 w-100 py-3" type="submit" id="submitBtn">
+                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    <span class="btn-text">إرسال الرسالة</span>
+                                </button>
                             </div>
                         </div>
                     </form>
+                    
+                    <!-- Success/Error Messages -->
+                    <div id="formMessages" class="mt-3" style="display: none;">
+                        <div class="alert alert-success" id="successMessage" style="display: none;">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="successText"></span>
+                        </div>
+                        <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span id="errorText"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -245,6 +281,145 @@
 
     <!-- Sawaed Javascript -->
     <script src="js/main.js"></script>
+    
+    <!-- Privacy Banner -->
+    <script src="js/privacy-banner.js"></script>
+    
+    <!-- Contact Form Handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = submitBtn.querySelector('.spinner-border');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const formMessages = document.getElementById('formMessages');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const successText = document.getElementById('successText');
+            const errorText = document.getElementById('errorText');
+            
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Reset messages
+                formMessages.style.display = 'none';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                spinner.classList.remove('d-none');
+                btnText.textContent = 'جاري الإرسال...';
+                
+                try {
+                    const formData = new FormData(contactForm);
+                    
+                    const response = await fetch('/api/contact_handler.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Show success message
+                        successText.textContent = result.message;
+                        successMessage.style.display = 'block';
+                        formMessages.style.display = 'block';
+                        
+                        // Reset form
+                        contactForm.reset();
+                        contactForm.classList.remove('was-validated');
+                        
+                        // Scroll to message
+                        formMessages.scrollIntoView({ behavior: 'smooth' });
+                        
+                    } else {
+                        // Show error message
+                        errorText.textContent = result.message;
+                        if (result.errors) {
+                            errorText.textContent += '\n' + result.errors.join('\n');
+                        }
+                        errorMessage.style.display = 'block';
+                        formMessages.style.display = 'block';
+                        
+                        // Show validation errors
+                        if (result.errors) {
+                            result.errors.forEach(error => {
+                                // Find corresponding field and show error
+                                const field = contactForm.querySelector(`[name="${error.field}"]`);
+                                if (field) {
+                                    field.classList.add('is-invalid');
+                                }
+                            });
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    errorText.textContent = 'حدث خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.';
+                    errorMessage.style.display = 'block';
+                    formMessages.style.display = 'block';
+                } finally {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    spinner.classList.add('d-none');
+                    btnText.textContent = 'إرسال الرسالة';
+                }
+            });
+            
+            // Real-time validation
+            const inputs = contactForm.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.classList.contains('is-invalid')) {
+                        validateField(this);
+                    }
+                });
+            });
+            
+            function validateField(field) {
+                const value = field.value.trim();
+                let isValid = true;
+                let errorMessage = '';
+                
+                if (field.hasAttribute('required') && !value) {
+                    isValid = false;
+                    errorMessage = field.getAttribute('data-required-message') || 'هذا الحقل مطلوب';
+                } else if (field.type === 'email' && value && !isValidEmail(value)) {
+                    isValid = false;
+                    errorMessage = 'البريد الإلكتروني غير صحيح';
+                } else if (field.type === 'tel' && value && !isValidPhone(value)) {
+                    isValid = false;
+                    errorMessage = 'رقم الهاتف غير صحيح';
+                }
+                
+                if (isValid) {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                } else {
+                    field.classList.remove('is-valid');
+                    field.classList.add('is-invalid');
+                }
+                
+                return isValid;
+            }
+            
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            function isValidPhone(phone) {
+                const phoneRegex = /^[\+]?[0-9\s\-\(\)]{7,15}$/;
+                return phoneRegex.test(phone);
+            }
+        });
+    </script>
 </body>
 
 </html>
