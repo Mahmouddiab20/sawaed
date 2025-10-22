@@ -37,6 +37,9 @@ exports.handler = async (event, context) => {
         const siteId = process.env.NETLIFY_SITE_ID;
         const accessToken = process.env.NETLIFY_ACCESS_TOKEN;
 
+        console.log('Site ID:', siteId);
+        console.log('Access Token:', accessToken ? 'Present' : 'Missing');
+
         if (!siteId || !accessToken) {
             return {
                 statusCode: 500,
@@ -46,25 +49,43 @@ exports.handler = async (event, context) => {
                 },
                 body: JSON.stringify({ 
                     success: false, 
-                    message: 'Netlify configuration missing. Please set NETLIFY_SITE_ID and NETLIFY_ACCESS_TOKEN environment variables.' 
+                    message: 'Netlify configuration missing. Please set NETLIFY_SITE_ID and NETLIFY_ACCESS_TOKEN environment variables.',
+                    debug: {
+                        siteId: !!siteId,
+                        accessToken: !!accessToken
+                    }
                 })
             };
         }
 
-        // Fetch form submissions from Netlify API
-        const netlifyResponse = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms/contact/submissions`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+        // For now, let's return mock data to test the dashboard
+        // Later we can implement the real Netlify API call
+        const mockSubmissions = [
+            {
+                id: '1',
+                data: {
+                    name: 'أحمد محمد',
+                    email: 'ahmed@example.com',
+                    phone: '+966501234567',
+                    subject: 'استفسار عن خدمات التسويق',
+                    message: 'أريد معرفة المزيد عن خدماتكم في التسويق الرقمي'
+                },
+                created_at: new Date().toISOString()
+            },
+            {
+                id: '2',
+                data: {
+                    name: 'فاطمة علي',
+                    email: 'fatima@example.com',
+                    phone: '+966507654321',
+                    subject: 'طلب عرض أسعار',
+                    message: 'أحتاج عرض أسعار لخدمات إدارة وسائل التواصل الاجتماعي'
+                },
+                created_at: new Date(Date.now() - 86400000).toISOString()
             }
-        });
+        ];
 
-        if (!netlifyResponse.ok) {
-            throw new Error(`Netlify API error: ${netlifyResponse.status}`);
-        }
-
-        const submissions = await netlifyResponse.json();
+        const submissions = mockSubmissions;
 
         // Transform the data to our format
         const transformedData = submissions.map((submission, index) => ({

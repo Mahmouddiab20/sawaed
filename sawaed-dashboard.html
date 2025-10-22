@@ -353,7 +353,7 @@
                 document.getElementById('monthLeads').textContent = '...';
 
                 // Fetch from our Netlify Function
-                const response = await fetch('/.netlify/functions/get-form-submissions', {
+                const response = await fetch('/.netlify/functions/simple-dashboard', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
