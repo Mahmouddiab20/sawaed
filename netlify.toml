@@ -1,0 +1,30 @@
+[build]
+  command = "npm run build"
+  functions = "netlify/functions"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/admin/dashboard"
+  to = "/admin-dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/login"
+  to = "/admin-dashboard.html"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[dev]
+  command = "npm run dev"
+  port = 8888
+  publish = "."
