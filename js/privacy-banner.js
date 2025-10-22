@@ -113,19 +113,20 @@ class PrivacyBanner {
     }
     
     sendConsentToServer(consent, preferences) {
-        fetch('/api/consent_handler.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                consent: consent,
-                preferences: preferences,
-                timestamp: new Date().toISOString()
-            })
-        }).catch(error => {
-            console.error('Failed to send consent to server:', error);
+        // For Netlify, we'll just log the consent locally
+        // You can integrate with Netlify Functions later if needed
+        console.log('Consent saved locally:', {
+            consent: consent,
+            preferences: preferences,
+            timestamp: new Date().toISOString()
         });
+        
+        // Store in localStorage for persistence
+        localStorage.setItem('sawaed_consent_data', JSON.stringify({
+            consent: consent,
+            preferences: preferences,
+            timestamp: new Date().toISOString()
+        }));
     }
     
     trackConsent(action) {

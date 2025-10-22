@@ -281,18 +281,28 @@
     <script src="lib/lightbox/js/lightbox.min.js"></script>
 
     <!-- Sawaed Javascript -->
-    <script src="js/main.js?v=2"></script>
+    <script src="js/main.js?v=3"></script>
     
     <!-- Privacy Banner -->
-    <script src="js/privacy-banner.js?v=2"></script>
+    <script src="js/privacy-banner.js?v=3"></script>
     
     <!-- Netlify Form Handler -->
     <script>
+        // Clear any old event listeners
+        document.removeEventListener('DOMContentLoaded', arguments.callee);
+        
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Contact form script loaded');
+            
             const contactForm = document.getElementById('contactForm');
+            if (!contactForm) {
+                console.log('Contact form not found');
+                return;
+            }
+            
             const submitBtn = document.getElementById('submitBtn');
-            const spinner = submitBtn.querySelector('.spinner-border');
-            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn ? submitBtn.querySelector('.spinner-border') : null;
+            const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
             const formMessages = document.getElementById('formMessages');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
@@ -301,25 +311,36 @@
             
             // Check if form was submitted successfully (Netlify redirects to success page)
             if (window.location.search.includes('success=true')) {
-                successText.textContent = 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.';
-                successMessage.style.display = 'block';
-                formMessages.style.display = 'block';
-                formMessages.scrollIntoView({ behavior: 'smooth' });
+                if (successText) {
+                    successText.textContent = 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.';
+                }
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                }
+                if (formMessages) {
+                    formMessages.style.display = 'block';
+                    formMessages.scrollIntoView({ behavior: 'smooth' });
+                }
             }
             
+            // Simple form submission handler
             contactForm.addEventListener('submit', function(e) {
-                // Show loading state
-                submitBtn.disabled = true;
-                spinner.classList.remove('d-none');
-                btnText.textContent = 'جاري الإرسال...';
+                console.log('Form submitted');
+                
+                // Show loading state if elements exist
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    if (spinner) spinner.classList.remove('d-none');
+                    if (btnText) btnText.textContent = 'جاري الإرسال...';
+                }
                 
                 // Hide previous messages
-                formMessages.style.display = 'none';
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
+                if (formMessages) formMessages.style.display = 'none';
+                if (successMessage) successMessage.style.display = 'none';
+                if (errorMessage) errorMessage.style.display = 'none';
                 
-                // Let Netlify handle the form submission
-                // The form will redirect to a success page or show an error
+                // Let Netlify handle the form submission naturally
+                // No fetch calls or AJAX - just let the form submit normally
             });
             
             // Real-time validation
