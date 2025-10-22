@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Dashboard API Test</h1>
+    
+    <div class="test-section info">
+        <h3>Test 1: Basic PHP Test</h3>
+        <button onclick="testBasicPHP()">Test Basic PHP</button>
+        <div id="basicPHPResult"></div>
+    </div>
+    
+    <div class="test-section info">
+        <h3>Test 2: Simple Leads API</h3>
+        <button onclick="testSimpleLeadsAPI()">Test Simple Leads API</button>
+        <div id="simpleLeadsResult"></div>
+    </div>
+    
+    <div class="test-section info">
+        <h3>Test 3: Lead Details API</h3>
+        <button onclick="testLeadDetailsAPI()">Test Lead Details API</button>
+        <div id="leadDetailsResult"></div>
+    </div>
+
+    <script>
+        async function testBasicPHP() {
+            const resultDiv = document.getElementById('basicPHPResult');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch('test-php.php');
+                const responseText = await response.text();
+                
+                if (responseText.includes('<?php')) {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ PHP Not Processing</h4>
+                            <p>Server returned raw PHP code instead of executing it.</p>
+                            <pre>${responseText.substring(0, 200)}...</pre>
+                        </div>
+                    `;
+                } else {
+                    try {
+                        const data = JSON.parse(responseText);
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ PHP Working</h4>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </div>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ Invalid JSON</h4>
+                                <pre>${responseText}</pre>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Request Failed</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testSimpleLeadsAPI() {
+            const resultDiv = document.getElementById('simpleLeadsResult');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch('admin/api/get_leads_simple.php');
+                const responseText = await response.text();
+                
+                if (responseText.includes('<?php')) {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ PHP Not Processing</h4>
+                            <p>Server returned raw PHP code instead of executing it.</p>
+                            <pre>${responseText.substring(0, 300)}...</pre>
+                        </div>
+                    `;
+                } else {
+                    try {
+                        const data = JSON.parse(responseText);
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ Simple Leads API Working</h4>
+                                <p>Total leads: ${data.total || 0}</p>
+                                <pre>${JSON.stringify(data, null, 2).substring(0, 500)}...</pre>
+                            </div>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ Invalid JSON Response</h4>
+                                <pre>${responseText.substring(0, 500)}</pre>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Request Failed</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testLeadDetailsAPI() {
+            const resultDiv = document.getElementById('leadDetailsResult');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch('admin/api/get_lead_details.php?all=true');
+                const responseText = await response.text();
+                
+                if (responseText.includes('<?php')) {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ PHP Not Processing</h4>
+                            <p>Server returned raw PHP code instead of executing it.</p>
+                            <pre>${responseText.substring(0, 300)}...</pre>
+                        </div>
+                    `;
+                } else {
+                    try {
+                        const data = JSON.parse(responseText);
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ Lead Details API Working</h4>
+                                <p>Total leads: ${data.total || 0}</p>
+                                <pre>${JSON.stringify(data, null, 2).substring(0, 500)}...</pre>
+                            </div>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ Invalid JSON Response</h4>
+                                <pre>${responseText.substring(0, 500)}</pre>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Request Failed</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -45,8 +45,8 @@ exports.handler = async (event, context) => {
 
         if (siteId && accessToken) {
             try {
-                // Fetch real form submissions from Netlify API
-                const netlifyResponse = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms/contact/submissions`, {
+                // First, get all forms to find the right form names
+                const formsResponse = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -54,23 +54,61 @@ exports.handler = async (event, context) => {
                     }
                 });
 
-                if (netlifyResponse.ok) {
-                    const submissions = await netlifyResponse.json();
-                    console.log('Real submissions found:', submissions.length);
+                let allSubmissions = [];
+
+                if (formsResponse.ok) {
+                    const forms = await formsResponse.json();
+                    console.log('Available forms:', forms.map(f => f.name));
                     
-                    // Transform real data
-                    realData = submissions.map((submission, index) => ({
+                    // Get submissions from all forms
+                    for (const form of forms) {
+                        try {
+                            const submissionsResponse = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms/${form.name}/submissions`, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${accessToken}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (submissionsResponse.ok) {
+                                const submissions = await submissionsResponse.json();
+                                console.log(`Found ${submissions.length} submissions in form: ${form.name}`);
+                                
+                                // Add form type to each submission
+                                submissions.forEach(submission => {
+                                    submission.form_type = form.name;
+                                });
+                                
+                                allSubmissions = allSubmissions.concat(submissions);
+                            }
+                        } catch (formError) {
+                            console.error(`Error fetching submissions from form ${form.name}:`, formError);
+                        }
+                    }
+                }
+
+                if (allSubmissions.length > 0) {
+                    console.log(`Total real submissions found: ${allSubmissions.length}`);
+                    
+                    // Transform real data with more comprehensive mapping
+                    realData = allSubmissions.map((submission, index) => ({
                         id: submission.id || index + 1,
-                        name: submission.data.name || 'غير محدد',
+                        name: submission.data.name || submission.data.full_name || 'غير محدد',
                         email: submission.data.email || 'غير محدد',
-                        phone: submission.data.phone || 'غير محدد',
-                        subject: submission.data.subject || 'غير محدد',
-                        message: submission.data.message || 'غير محدد',
-                        created_at: submission.created_at || new Date().toISOString()
+                        phone: submission.data.phone || submission.data.telephone || 'غير محدد',
+                        subject: submission.data.subject || submission.data.topic || 'غير محدد',
+                        message: submission.data.message || submission.data.comments || 'غير محدد',
+                        company: submission.data.company || submission.data.organization || 'غير محدد',
+                        service: submission.data.service || submission.data.interest || 'غير محدد',
+                        form_type: submission.form_type || 'contact',
+                        created_at: submission.created_at || new Date().toISOString(),
+                        ip_address: submission.ip || 'غير محدد',
+                        user_agent: submission.user_agent || 'غير محدد'
                     }));
                 } else {
-                    console.error('Netlify API error:', netlifyResponse.status);
-                    throw new Error(`Netlify API error: ${netlifyResponse.status}`);
+                    console.log('No real submissions found, using sample data');
+                    throw new Error('No real submissions found');
                 }
             } catch (apiError) {
                 console.error('API Error:', apiError);
@@ -83,6 +121,9 @@ exports.handler = async (event, context) => {
                         phone: 'غير متوفر',
                         subject: 'لا يمكن تحميل البيانات الحقيقية',
                         message: 'يرجى التحقق من إعدادات Netlify API',
+                        company: 'غير محدد',
+                        service: 'غير محدد',
+                        form_type: 'error',
                         created_at: new Date().toISOString()
                     }
                 ];

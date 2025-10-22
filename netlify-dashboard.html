@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم سواعد - إدارة العملاء المحتملين</title>
+    <title>لوحة تحكم سواعد - البيانات الحقيقية</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -101,9 +101,38 @@
             border-radius: 20px;
             font-size: 0.8rem;
         }
+        
+        .data-source-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .data-source-real {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .data-source-sample {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
     </style>
 </head>
 <body>
+    <!-- Data Source Indicator -->
+    <div id="dataSourceIndicator" class="data-source-indicator d-none">
+        <i class="fas fa-database me-1"></i>
+        <span id="dataSourceText">جاري التحميل...</span>
+    </div>
+
     <!-- Login Screen (shown by default) -->
     <div id="loginScreen" class="login-container">
         <div class="container">
@@ -113,7 +142,7 @@
                         <div class="login-header">
                             <i class="fas fa-chart-line fa-3x mb-3"></i>
                             <h3>لوحة تحكم سواعد</h3>
-                            <p class="mb-0">إدارة العملاء المحتملين</p>
+                            <p class="mb-0">البيانات الحقيقية من Netlify</p>
                         </div>
                         <div class="p-4">
                             <div id="loginError" class="alert alert-danger d-none" role="alert">
@@ -170,7 +199,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
                     <i class="fas fa-chart-line me-2"></i>
-                    لوحة تحكم سواعد
+                    لوحة تحكم سواعد - البيانات الحقيقية
                 </a>
                 <div class="navbar-nav ms-auto">
                     <button class="btn btn-outline-light btn-sm me-3" onclick="loadLeads()">
@@ -193,7 +222,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-8">
                                 <h2 class="mb-2">مرحباً بك في لوحة التحكم</h2>
-                                <p class="mb-0">إحصائيات وتتبع العملاء المحتملين</p>
+                                <p class="mb-0">إحصائيات وتتبع العملاء المحتملين من البيانات الحقيقية</p>
                             </div>
                             <div class="col-md-4 text-end">
                                 <i class="fas fa-users" style="font-size: 4rem; opacity: 0.3;"></i>
@@ -299,6 +328,9 @@
         // Global variables
         let authToken = null;
         let leadsData = [];
+        let dailyChart = null;
+        let monthlyChart = null;
+        let dataSource = 'unknown';
 
         // Login form handler
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -347,7 +379,7 @@
             document.getElementById('dashboardScreen').classList.add('d-none');
         }
 
-        // Load real leads data from local API
+        // Load real leads data from Netlify functions
         async function loadLeads() {
             try {
                 // Show loading state
@@ -356,40 +388,31 @@
                 document.getElementById('weekLeads').textContent = '...';
                 document.getElementById('monthLeads').textContent = '...';
 
-                // Try to fetch from simple PHP API first
+                // Try to fetch from Netlify function
                 let response;
                 try {
-                    response = await fetch('admin/api/get_leads_simple.php', {
+                    response = await fetch('/.netlify/functions/simple-dashboard', {
                         method: 'GET',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
                         }
                     });
                 } catch (apiError) {
-                    console.log('PHP API not available, using sample data');
+                    console.log('Netlify function not available, using sample data');
                     throw apiError;
                 }
 
                 if (response && response.ok) {
-                    const responseText = await response.text();
-                    console.log('API Response:', responseText);
+                    const result = await response.json();
+                    console.log('API Response:', result);
                     
-                    // Check if response contains PHP code (server configuration issue)
-                    if (responseText.includes('<?php') || responseText.includes('<!DOCTYPE')) {
-                        console.warn('Server returned PHP code instead of JSON - using fallback data');
-                        throw new Error('Server configuration issue - PHP not processing correctly');
-                    }
-                    
-                    try {
-                        const result = JSON.parse(responseText);
-                        if (result.success && result.data) {
-                            leadsData = result.data;
-                        } else {
-                            throw new Error('Invalid response from API');
-                        }
-                    } catch (parseError) {
-                        console.error('Failed to parse JSON response:', parseError);
-                        throw new Error('Invalid JSON response from server');
+                    if (result.success && result.data) {
+                        leadsData = result.data;
+                        dataSource = result.debug?.dataSource || 'unknown';
+                        updateDataSourceIndicator();
+                    } else {
+                        throw new Error('Invalid response from API');
                     }
                 } else {
                     throw new Error('API request failed with status: ' + response.status);
@@ -411,8 +434,6 @@
                         phone: '+966501234567',
                         subject: 'استفسار عن خدمات التسويق',
                         message: 'أرغب في معرفة المزيد عن خدماتكم في التسويق الرقمي',
-                        form_type: 'contact',
-                        consent_given: 1,
                         created_at: new Date().toISOString()
                     },
                     {
@@ -422,8 +443,6 @@
                         phone: '+966509876543',
                         subject: 'طلب استشارة',
                         message: 'أحتاج استشارة حول استراتيجية التسويق لشركتي',
-                        form_type: 'consultation',
-                        consent_given: 1,
                         created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
                     },
                     {
@@ -433,8 +452,6 @@
                         phone: '+966501112233',
                         subject: 'طلب وظيفة',
                         message: 'أرغب في التقدم لوظيفة في مجال التسويق الرقمي',
-                        form_type: 'job_application',
-                        consent_given: 0,
                         created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
                     },
                     {
@@ -444,8 +461,6 @@
                         phone: '+966502223344',
                         subject: 'استفسار عن الأسعار',
                         message: 'أريد معرفة أسعار خدماتكم في الإعلانات',
-                        form_type: 'contact',
-                        consent_given: 1,
                         created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
                     },
                     {
@@ -455,15 +470,30 @@
                         phone: '+966503334455',
                         subject: 'طلب عرض أسعار',
                         message: 'أحتاج عرض أسعار لحملة إعلانية شاملة',
-                        form_type: 'contact',
-                        consent_given: 1,
                         created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
                     }
                 ];
-
+                
+                dataSource = 'sample';
+                updateDataSourceIndicator();
                 updateStatistics();
                 updateCharts();
                 updateLeadsTable(leadsData);
+            }
+        }
+
+        function updateDataSourceIndicator() {
+            const indicator = document.getElementById('dataSourceIndicator');
+            const text = document.getElementById('dataSourceText');
+            
+            indicator.classList.remove('d-none');
+            
+            if (dataSource === 'Netlify API') {
+                indicator.className = 'data-source-indicator data-source-real';
+                text.textContent = 'بيانات حقيقية من Netlify';
+            } else {
+                indicator.className = 'data-source-indicator data-source-sample';
+                text.textContent = 'بيانات تجريبية';
             }
         }
 
@@ -481,10 +511,6 @@
             document.getElementById('weekLeads').textContent = weekLeads;
             document.getElementById('monthLeads').textContent = monthLeads;
         }
-
-        // Global chart instances
-        let dailyChart = null;
-        let monthlyChart = null;
 
         function updateCharts() {
             // Destroy existing charts if they exist
@@ -624,7 +650,6 @@
 
         // Cleanup function to handle browser extension errors
         function cleanup() {
-            // Destroy charts before page unload
             if (dailyChart) {
                 dailyChart.destroy();
                 dailyChart = null;
@@ -643,16 +668,9 @@
         window.addEventListener('error', function(e) {
             if (e.message && e.message.includes('runtime.lastError')) {
                 console.warn('Browser extension error ignored:', e.message);
-                return true; // Prevent error from showing in console
+                return true;
             }
         });
-
-        // Auto-refresh every 5 minutes (disabled to prevent runtime errors)
-        // setInterval(function() {
-        //     if (authToken) {
-        //         loadLeads();
-        //     }
-        // }, 300000);
     </script>
 </body>
 </html>
