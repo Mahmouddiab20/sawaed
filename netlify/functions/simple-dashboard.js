@@ -33,36 +33,75 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // Return sample data for now
-        const sampleData = [
-            {
-                id: 1,
-                name: 'أحمد محمد',
-                email: 'ahmed@example.com',
-                phone: '+966501234567',
-                subject: 'استفسار عن خدمات التسويق',
-                message: 'أريد معرفة المزيد عن خدماتكم في التسويق الرقمي',
-                created_at: new Date().toISOString()
-            },
-            {
-                id: 2,
-                name: 'فاطمة علي',
-                email: 'fatima@example.com',
-                phone: '+966507654321',
-                subject: 'طلب عرض أسعار',
-                message: 'أحتاج عرض أسعار لخدمات إدارة وسائل التواصل الاجتماعي',
-                created_at: new Date(Date.now() - 86400000).toISOString()
-            },
-            {
-                id: 3,
-                name: 'محمد السعيد',
-                email: 'mohammed@example.com',
-                phone: '+966509876543',
-                subject: 'استشارة تسويقية',
-                message: 'أريد استشارة حول استراتيجية التسويق لمتجر إلكتروني',
-                created_at: new Date(Date.now() - 172800000).toISOString()
+        // Get environment variables
+        const siteId = process.env.NETLIFY_SITE_ID;
+        const accessToken = process.env.NETLIFY_ACCESS_TOKEN;
+
+        console.log('Fetching real data from Netlify API...');
+        console.log('Site ID:', siteId);
+        console.log('Access Token:', accessToken ? 'Present' : 'Missing');
+
+        let realData = [];
+
+        if (siteId && accessToken) {
+            try {
+                // Fetch real form submissions from Netlify API
+                const netlifyResponse = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms/contact/submissions`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (netlifyResponse.ok) {
+                    const submissions = await netlifyResponse.json();
+                    console.log('Real submissions found:', submissions.length);
+                    
+                    // Transform real data
+                    realData = submissions.map((submission, index) => ({
+                        id: submission.id || index + 1,
+                        name: submission.data.name || 'غير محدد',
+                        email: submission.data.email || 'غير محدد',
+                        phone: submission.data.phone || 'غير محدد',
+                        subject: submission.data.subject || 'غير محدد',
+                        message: submission.data.message || 'غير محدد',
+                        created_at: submission.created_at || new Date().toISOString()
+                    }));
+                } else {
+                    console.error('Netlify API error:', netlifyResponse.status);
+                    throw new Error(`Netlify API error: ${netlifyResponse.status}`);
+                }
+            } catch (apiError) {
+                console.error('API Error:', apiError);
+                // Fallback to sample data if API fails
+                realData = [
+                    {
+                        id: 1,
+                        name: 'خطأ في تحميل البيانات',
+                        email: 'error@example.com',
+                        phone: 'غير متوفر',
+                        subject: 'لا يمكن تحميل البيانات الحقيقية',
+                        message: 'يرجى التحقق من إعدادات Netlify API',
+                        created_at: new Date().toISOString()
+                    }
+                ];
             }
-        ];
+        } else {
+            console.log('Missing environment variables, using sample data');
+            // Fallback to sample data if env vars missing
+            realData = [
+                {
+                    id: 1,
+                    name: 'إعدادات مفقودة',
+                    email: 'config@example.com',
+                    phone: 'غير متوفر',
+                    subject: 'NETLIFY_SITE_ID أو NETLIFY_ACCESS_TOKEN مفقود',
+                    message: 'يرجى إضافة المتغيرات المطلوبة في إعدادات Netlify',
+                    created_at: new Date().toISOString()
+                }
+            ];
+        }
 
         return {
             statusCode: 200,
@@ -72,9 +111,14 @@ exports.handler = async (event, context) => {
             },
             body: JSON.stringify({
                 success: true,
-                data: sampleData,
-                total: sampleData.length,
-                message: 'Sample data loaded successfully'
+                data: realData,
+                total: realData.length,
+                message: realData.length > 0 ? 'Real data loaded successfully' : 'No real data found, check your form submissions',
+                debug: {
+                    siteId: !!siteId,
+                    accessToken: !!accessToken,
+                    dataSource: siteId && accessToken ? 'Netlify API' : 'Fallback'
+                }
             })
         };
 
