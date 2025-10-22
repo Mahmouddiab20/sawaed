@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار النماذج - Netlify</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>اختبار النماذج في Netlify</h1>
+    
+    <div class="test-section info">
+        <h3>اختبار النماذج المتاحة</h3>
+        <button onclick="testForms()">فحص النماذج</button>
+        <div id="formsResult"></div>
+    </div>
+    
+    <div class="test-section info">
+        <h3>إرسال نموذج تجريبي</h3>
+        <form name="test-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="test-form" />
+            <p class="hidden">
+                <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+            </p>
+            
+            <div style="margin: 10px 0;">
+                <label>الاسم:</label><br>
+                <input type="text" name="name" placeholder="أدخل اسمك" required style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            
+            <div style="margin: 10px 0;">
+                <label>البريد الإلكتروني:</label><br>
+                <input type="email" name="email" placeholder="أدخل بريدك الإلكتروني" required style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            
+            <div style="margin: 10px 0;">
+                <label>الهاتف:</label><br>
+                <input type="tel" name="phone" placeholder="أدخل رقم هاتفك" style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            
+            <div style="margin: 10px 0;">
+                <label>الموضوع:</label><br>
+                <input type="text" name="subject" placeholder="أدخل موضوع الرسالة" required style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            
+            <div style="margin: 10px 0;">
+                <label>الرسالة:</label><br>
+                <textarea name="message" placeholder="أدخل رسالتك" required style="width: 100%; padding: 8px; margin: 5px 0; height: 100px;"></textarea>
+            </div>
+            
+            <button type="submit" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                إرسال النموذج التجريبي
+            </button>
+        </form>
+    </div>
+
+    <script>
+        async function testForms() {
+            const resultDiv = document.getElementById('formsResult');
+            resultDiv.innerHTML = '<p>جاري فحص النماذج...</p>';
+            
+            try {
+                const response = await fetch('/.netlify/functions/simple-dashboard', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sawaed-admin-2024'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success && data.data) {
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <h4>✅ النماذج تعمل</h4>
+                                <p>عدد البيانات: ${data.data.length}</p>
+                                <p>مصدر البيانات: ${data.debug?.dataSource || 'غير محدد'}</p>
+                                <p>تفاصيل البيانات:</p>
+                                <pre>${JSON.stringify(data.data, null, 2)}</pre>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <h4>❌ مشكلة في البيانات</h4>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </div>
+                        `;
+                    }
+                } else {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ فشل في فحص النماذج</h4>
+                            <p>Status: ${response.status}</p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ خطأ في الطلب</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

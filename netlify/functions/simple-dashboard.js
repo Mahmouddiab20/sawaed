@@ -91,6 +91,12 @@ exports.handler = async (event, context) => {
                 if (formsResponse.ok) {
                     const forms = await formsResponse.json();
                     console.log('Available forms:', forms.map(f => f.name));
+                    console.log('Forms details:', forms);
+                    
+                    if (forms.length === 0) {
+                        console.log('No forms found on the site');
+                        throw new Error('No forms found on the site');
+                    }
                     
                     // Get submissions from all forms
                     for (const form of forms) {
@@ -140,7 +146,21 @@ exports.handler = async (event, context) => {
                     }));
                 } else {
                     console.log('No real submissions found, using sample data');
-                    throw new Error('No real submissions found');
+                    // Don't throw error, just use sample data
+                    realData = [
+                        {
+                            id: 1,
+                            name: 'لا توجد بيانات حقيقية',
+                            email: 'no-data@example.com',
+                            phone: 'غير متوفر',
+                            subject: 'لم يتم العثور على بيانات حقيقية',
+                            message: 'يرجى التأكد من وجود نماذج مرسلة في الموقع',
+                            company: 'غير محدد',
+                            service: 'غير محدد',
+                            form_type: 'no_data',
+                            created_at: new Date().toISOString()
+                        }
+                    ];
                 }
             } catch (apiError) {
                 console.error('API Error:', apiError);
