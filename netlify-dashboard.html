@@ -600,21 +600,37 @@
         function updateLeadsTable(leads) {
             const tbody = document.getElementById('leadsTableBody');
             tbody.innerHTML = '';
+            
+            console.log('Updating leads table with:', leads.length, 'leads');
+            console.log('Leads data:', leads);
 
-            leads.forEach(lead => {
+            if (leads.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">
+                            <i class="fas fa-inbox me-2"></i>
+                            لا توجد بيانات للعرض
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            leads.forEach((lead, index) => {
+                console.log(`Processing lead ${index + 1}:`, lead);
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="avatar bg-primary text-white rounded-circle me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                                ${lead.name.substring(0, 2).toUpperCase()}
+                                ${(lead.name || 'غير محدد').substring(0, 2).toUpperCase()}
                             </div>
-                            ${lead.name}
+                            ${lead.name || 'غير محدد'}
                         </div>
                     </td>
-                    <td>${lead.email}</td>
+                    <td>${lead.email || 'غير محدد'}</td>
                     <td>${lead.phone || 'غير محدد'}</td>
-                    <td>${lead.subject}</td>
+                    <td>${lead.subject || 'غير محدد'}</td>
                     <td>${new Date(lead.created_at).toLocaleDateString('ar-SA')}</td>
                     <td>
                         <button class="btn btn-outline-primary btn-sm" onclick="viewLead(${lead.id})">
@@ -624,6 +640,8 @@
                 `;
                 tbody.appendChild(row);
             });
+            
+            console.log('Table updated with', tbody.children.length, 'rows');
         }
 
         function viewLead(leadId) {
